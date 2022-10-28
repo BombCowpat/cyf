@@ -18,7 +18,7 @@ jobs:
       # 制作docker镜像并推送到阿里云容器镜像服务
       - name: build and push docker image
         run: |
-          echo ${{ secrets.TENCENT_CLOUD_DOCKER_PASSWORD }} | docker login ccr.ccs.tencentyun.com --username ${{ secrets.TENCENT_CLOUD_USERNAME }} --password-stdin
+          docker login ccr.ccs.tencentyun.com -u ${{ secrets.TENCENT_CLOUD_USERNAME }} -p ${{ secrets.TENCENT_CLOUD_DOCKER_PASSWORD }}
 
           docker image build -t cyf:latest .
           docker tag cyf ccr.ccs.tencentyun.com/cyfyy/index:latest
@@ -27,12 +27,12 @@ jobs:
       # 登录远程服务器，拉取镜像，制作并重启容器
       # https://github.com/marketplace/actions/remote-ssh-commands
       - name: ssh remote deploy
-        uses: appleboy/ssh-action@master
+        uses: fifsky/ssh-action@master
         with:
           command: |
             cd /
             echo -e "1.docker login start==>"
-            echo ${{ secrets.TENCENT_CLOUD_DOCKER_PASSWORD }} | docker login ccr.ccs.tencentyun.com --username ${{ secrets.TENCENT_CLOUD_USERNAME }} --password-stdin
+            docker login ccr.ccs.tencentyun.com -u ${{ secrets.TENCENT_CLOUD_USERNAME }} -p ${{ secrets.TENCENT_CLOUD_DOCKER_PASSWORD }}
 
             echo -e "2.docker stop myblog container==>"
             docker stop cyfme
