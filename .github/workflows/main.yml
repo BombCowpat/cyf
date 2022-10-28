@@ -1,0 +1,57 @@
+name: cyf Image CI
+
+on:
+  push: # push 时触发ci
+    branches: [main] # 作用于main分支
+  # pull_request:
+  #   branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 拉取main分支代码
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # 制作docker镜像并推送到阿里云容器镜像服务
+      - name: build and push docker image
+        run: |
+          echo ${{ secrets.TENCENT_CLOUD_DOCKER_PASSWORD }} | docker login ccr.ccs.tencentyun.com --username ${{ secrets.TENCENT_CLOUD_USERNAME }} --password-stdin
+
+          docker image build -t cyf:latest .
+          docker tag cyf ccr.ccs.tencentyun.com/cyfyy/index:latest
+          docker push ccr.ccs.tencentyun.com/cyfyy/index:latest
+          docker logout
+      # 登录远程服务器，拉取镜像，制作并重启容器
+      # https://github.com/marketplace/actions/remote-ssh-commands
+      - name: ssh remote deploy
+        uses: appleboy/ssh-action@master
+        with:
+          command: |
+            cd /
+            echo -e "1.docker login start==>"
+            echo ${{ secrets.TENCENT_CLOUD_DOCKER_PASSWORD }} | docker login ccr.ccs.tencentyun.com --username ${{ secrets.TENCENT_CLOUD_USERNAME }} --password-stdin
+
+            echo -e "2.docker stop myblog container==>"
+            docker stop cyfme
+
+            echo -e "3.docker conatainer rm==>"
+            docker rm cyfme
+
+            echo -e "4.docker image rm==>"
+            docker image rm ccr.ccs.tencentyun.com/cyfyy/index:latest
+
+            echo -e "5.docker pull==>"
+            docker pull ccr.ccs.tencentyun.com/cyfyy/index:latest
+
+            echo -e "6.docker container create and start==>"
+            docker run -d -p 81:3000 --name cyfme ccr.ccs.tencentyun.com/cyfyy/index:latest
+
+            echo -e "7.docker logout==>"
+            docker logout
+          host: ${{ secrets.TENCENT_CLOUD_HOST }}
+          user: ${{ secrets.TENCENT_CLOUD_USER }}
+          pass: ${{ secrets.TENCENT_CLOUD_PASSWORD }}
+
