@@ -18,7 +18,7 @@ jobs:
       # 制作docker镜像并推送到阿里云容器镜像服务
       - name: build and push docker image
         run: |
-          docker login ccr.ccs.tencentyun.com -u ${{ secrets.TENCENT_CLOUD_USERNAME }} -p ${{ secrets.TENCENT_CLOUD_DOCKER_PASSWORD }}
+          docker login -u ${{ secrets.TENCENT_CLOUD_USERNAME }} -p ${{ secrets.TENCENT_CLOUD_DOCKER_PASSWORD }} ccr.ccs.tencentyun.com
 
           docker image build -t cyf:latest .
           docker tag cyf ccr.ccs.tencentyun.com/cyfyy/index:latest
@@ -32,7 +32,7 @@ jobs:
           command: |
             cd /
             echo -e "1.docker login start==>"
-            docker login ccr.ccs.tencentyun.com -u ${{ secrets.TENCENT_CLOUD_USERNAME }} -p ${{ secrets.TENCENT_CLOUD_DOCKER_PASSWORD }}
+            docker login -u ${{ secrets.TENCENT_CLOUD_USERNAME }} -p ${{ secrets.TENCENT_CLOUD_DOCKER_PASSWORD }} ccr.ccs.tencentyun.com
 
             echo -e "2.docker stop myblog container==>"
             docker stop cyfme
