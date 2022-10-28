@@ -15,7 +15,7 @@ export default function Home() {
         <h1 className={styles.title}>
           ChenYanfei 🤗️
         </h1>
-
+        <h3>1997.7</h3>
         <p className={styles.description}>
           Get started by editing{' '}
           <code className={styles.code}>pages/index.js</code>
