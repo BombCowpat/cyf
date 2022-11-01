@@ -6,10 +6,16 @@ export default function Home() {
     <div>
       <Head>
         <title>ChenYanfei</title>
-        <meta name="description" content="movie,music,image" />
+        <meta name="description" content="movie,music,image,news" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <h1 className={styles.hero + ' text-5xl text-center p-8'}>Welcome to my website!</h1>
+      <ul>
+        <li>movie</li>
+        <li>music</li>
+        <li>image</li>
+        <li>news</li>
+      </ul>
     </div>
   )
 }
