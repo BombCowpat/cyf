@@ -47,7 +47,7 @@ export default function Home() {
         <meta name="description" content="movie,music,image,news" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1 className={styles.hero + ' text-5xl text-center p-8'}>Welcome to my website!</h1>
+      <h1 className={styles.hero + ' text-5xl text-center p-8'}>Welcome to my website!!</h1>
       <div id="box" className={styles.box}></div>
     </div>
   )
