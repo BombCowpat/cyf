@@ -1,5 +1,5 @@
 # 1. 构建基础镜像
-FROM node:14-alpine AS base
+FROM node:16-alpine AS base
 
 # 指定环境变量和镜像工作目录，指定环境变量为production后不会安装开发依赖，导致构建失败
 # ENV NODE_ENV=production \
